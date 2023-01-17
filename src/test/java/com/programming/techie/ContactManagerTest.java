@@ -2,11 +2,12 @@ package com.programming.techie;
 
 import org.junit.jupiter.api.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ContactManagerTest {
 
     ContactManager contactManager;
     @BeforeAll
-    public static void setupAll(){ //it must be a static method. It's executed for whole test class once
+    public void setupAll(){ //it must be a static method. It's executed for whole test class once
         System.out.println("Should print before all test cases");
     }
 
@@ -51,7 +52,7 @@ class ContactManagerTest {
         System.out.println("should be executed after each test");
     }
     @AfterAll
-    public static void tearDownAll() { //must be static
+    public void tearDownAll() { //must be static
         System.out.println("should be executed at the end");
     }
 }
