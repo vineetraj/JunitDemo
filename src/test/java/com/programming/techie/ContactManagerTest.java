@@ -3,6 +3,14 @@ package com.programming.techie;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ContactManagerTest {
@@ -78,6 +86,58 @@ class ContactManagerTest {
         Assertions.assertEquals(1, contactManager.getAllContacts().size());
     }
 
+    /*Repeated Tests*/
+    @DisplayName("repeat contact creation 5 times")
+    @RepeatedTest(value = 5, name = "Current repetition is {currentRepetition} of total {totalRepetitions}")
+    public void shouldCreateContactRepeatedly() {
+        contactManager.addContact("Vineet", "Raj", "0956051722");
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty()); //we expect contact list shouldn't be empty
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
+    /*Using Value Sources*/
+    @DisplayName("Value Source case")
+    @ParameterizedTest
+    @ValueSource(strings={"0123456789","0321654987","9874564321"})
+    public void shouldCreateContactRepeatedlyUsingValueSource(String phnNums) {
+        contactManager.addContact("Vineet", "Raj", phnNums);
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
+    /*Using Method Sources*/
+    @DisplayName("Method Source case")
+    @ParameterizedTest
+    @MethodSource("source")
+    public void shouldCreateContactRepeatedlyUsingMethodSource(String phnNums) {
+        contactManager.addContact("Vineet", "Raj", phnNums);
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
+    /*using CSV Sources*/
+    @DisplayName("Csv Source case")
+    @ParameterizedTest
+    @CsvSource({"0123456789","0321654987","9874564321"})
+    public void shouldCreateContactRepeatedlyUsingCSVSource(String phnNums) {
+        contactManager.addContact("Vineet", "Raj", phnNums);
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
+    private static List<String > source(){
+        return Arrays.asList("0123456789","0321654987","9874564321");
+    }
+
+    @DisplayName("CSV File Source case")
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data.csv")
+    public void shouldCreateContactRepeatedlyUsingCSVFileSource(String phnNums) {
+        contactManager.addContact("Vineet", "Raj", phnNums);
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
     @AfterEach
     public void tearDown(){
         System.out.println("should be executed after each test");
@@ -86,4 +146,6 @@ class ContactManagerTest {
     public void tearDownAll() { //must be static
         System.out.println("should be executed at the end");
     }
+
+
 }
