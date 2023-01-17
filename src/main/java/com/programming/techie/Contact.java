@@ -31,7 +31,7 @@ public class Contact {
 
     public void validatePhoneNumber() {
         if (this.phoneNumber.isBlank()) {
-            throw new RuntimeException("Phone Name Cannot be null or empty");
+            throw new RuntimeException("Phone Number Cannot be null or empty");
         }
 
         if (this.phoneNumber.length() != 10) {
