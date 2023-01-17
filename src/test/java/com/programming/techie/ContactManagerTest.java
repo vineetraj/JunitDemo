@@ -1,6 +1,8 @@
 package com.programming.techie;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ContactManagerTest {
@@ -45,6 +47,35 @@ class ContactManagerTest {
         Assertions.assertThrows(RuntimeException.class, () -> {
             contactManager.addContact("Raju", "Singh", null);
         });
+    }
+
+    /*Assumptions*/
+    @Test
+    @DisplayName("Test contact creation on development machine")
+    public void shouldCreateContactOnDev() {
+        Assumptions.assumeTrue("TEST".equals(System.getProperty("ENV")));
+        contactManager.addContact("Vineet", "Raj", "0956051722");
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty()); //we expect contact list shouldn't be empty
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
+    /*Conditional Executions*/
+    @Test
+    @DisplayName("should not run on windows")
+    @DisabledOnOs(value=OS.WINDOWS,disabledReason = "no need to run on windows")
+    public void shouldNotCreateContactOnWindows() {
+        contactManager.addContact("Vikash", "Raj", "0955621478");
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty()); //we expect contact list shouldn't be empty
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
+    @Test
+    @DisplayName("should not run on Mac os")
+    @DisabledOnOs(value=OS.MAC,disabledReason = "no need to run on Mac")
+    public void shouldNotCreateContactsOnMac() {
+        contactManager.addContact("Rajoo", "Jaiswal", "0944621478");
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty()); //we expect contact list shouldn't be empty
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
     }
 
     @AfterEach
